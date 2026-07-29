@@ -38,9 +38,13 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*)
 
-ENV NODE_ENV=production
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
-ENV DISPLAY=:99
+ENV NODE_ENV=production \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
+    DISPLAY=:99 \
+    HOME=/tmp \
+    TMPDIR=/tmp \
+    XDG_RUNTIME_DIR=/tmp \
+    SONGHUB_SAVED_TABS_DIR=/app/saved-tabs
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
@@ -51,8 +55,11 @@ COPY start.sh ./start.sh
 RUN chmod +x start.sh
 
 RUN mkdir -p /app/saved-tabs && \
+    chown node:node /app/saved-tabs && \
     ln -sf /usr/bin/chromium /usr/bin/chromium-browser && \
     ln -sf /usr/bin/chromium /usr/bin/google-chrome
+
+USER node
 
 EXPOSE 3005
 
