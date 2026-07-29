@@ -1,5 +1,28 @@
 # SongHub Deployment Guide (Docker Compose)
 
+## Docker image for Kubernetes
+
+The GitHub Actions workflow `.github/workflows/docker-image.yml` builds the Docker image and publishes it to GitHub Container Registry:
+
+```text
+ghcr.io/gravelfreeman/songhub
+```
+
+Generated tags:
+
+- `latest` on the default branch
+- `main` or `master`, depending on the pushed branch
+- `sha-<commit>` for immutable Kubernetes deployments
+- `vX.Y.Z`, `vX.Y` when a `v*` Git tag is pushed
+
+Example image to use in Kubernetes:
+
+```yaml
+image: ghcr.io/gravelfreeman/songhub:sha-<commit>
+```
+
+If the GHCR package remains private, configure a Kubernetes `imagePullSecret` with a GitHub token authorized to read packages.
+
 ## 1) Configure login credentials
 
 Create a `.env` file in the same folder as `docker-compose.yml`:
