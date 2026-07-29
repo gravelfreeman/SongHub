@@ -10,15 +10,14 @@ ghcr.io/gravelfreeman/songhub
 
 Generated tags:
 
-- `latest` on the default branch
-- `main` or `master`, depending on the pushed branch
-- `sha-<commit>` for immutable Kubernetes deployments
-- `vX.Y.Z`, `vX.Y` when a `v*` Git tag is pushed
+- `latest` on published builds
+- `vX.Y.Z` from `package.json` on branch and manual builds
+- the Git tag name when a `v*` Git tag is pushed
 
 Example image to use in Kubernetes:
 
 ```yaml
-image: ghcr.io/gravelfreeman/songhub:sha-<commit>
+image: ghcr.io/gravelfreeman/songhub:v1.7.0
 ```
 
 If the GHCR package remains private, configure a Kubernetes `imagePullSecret` with a GitHub token authorized to read packages.
