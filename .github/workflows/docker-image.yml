@@ -5,12 +5,14 @@ on:
     branches:
       - main
       - master
+      - dev
     tags:
       - 'v*'
   pull_request:
     branches:
       - main
       - master
+      - dev
   workflow_dispatch:
 
 env:
@@ -57,8 +59,9 @@ jobs:
           tags: |
             type=ref,event=pr
             type=ref,event=tag
-            type=raw,value=latest,enable=${{ github.event_name != 'pull_request' }}
-            type=raw,value=v${{ steps.package.outputs.version }},enable=${{ github.event_name != 'pull_request' && github.ref_type != 'tag' }}
+            type=sha,prefix=dev-,format=short,enable=${{ github.event_name != 'pull_request' && github.ref_name == 'dev' }}
+            type=raw,value=latest,enable=${{ github.event_name != 'pull_request' && github.ref_type == 'branch' && (github.ref_name == 'main' || github.ref_name == 'master') }}
+            type=raw,value=v${{ steps.package.outputs.version }},enable=${{ github.event_name != 'pull_request' && github.ref_type == 'branch' && (github.ref_name == 'main' || github.ref_name == 'master') }}
 
       - name: Build and publish Docker image
         uses: docker/build-push-action@v6
