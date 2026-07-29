@@ -44,6 +44,8 @@ ENV NODE_ENV=production \
     HOME=/tmp \
     TMPDIR=/tmp \
     XDG_RUNTIME_DIR=/tmp \
+    XDG_CACHE_HOME=/tmp \
+    NPM_CONFIG_CACHE=/tmp \
     SONGHUB_SAVED_TABS_DIR=/app/saved-tabs
 
 COPY --from=builder /app/.next ./.next
